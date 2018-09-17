@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<training>
+	<name>Java Training</name>
+	<person id="1">
+		<name>Mathu</name>
+	</person>
+	<person id="2">
+		<name>Maathu</name>
+	</person>
+</training>

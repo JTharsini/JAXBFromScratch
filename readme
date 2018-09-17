@@ -1,0 +1,58 @@
+1. create a maven project and add 
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<target>1.6</target>
+					<source>1.6</source>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	
+2. If we have XSD files, can generate classes. If we don't have, we need to write it from scratch
+
+3. Create, add only 'name' attribute to 'Training' class and test.
+
+4. create 'Person' class and add list of persons to 'Training' class. This won't work because, 'persons' is the name of the variable in the attribute and 'person' is used in XML.
+
+5. Generate schema from classes:
+New -> Other -> Schema from JAXB Classes -> Select the classes -> Finish
+
+6. Generate classes from XSD file : by JAXB-2 maven plugin and add the following to pom file
+
+<plugin>
+    <groupId>org.codehaus.mojo</groupId>
+    <artifactId>jaxb2-maven-plugin</artifactId>
+    <version>1.5</version>
+    <executions>
+        <execution>
+            <id>xjc</id>
+            <goals>
+                <goal>xjc</goal>
+            </goals>
+        </execution>
+    </executions>
+    <configuration>
+		<outputDirectory>target/generated-sources/jaxb</outputDirectory>
+		<!-- The package of your generated sources -->
+		<packageName>com.example.createfromxjc</packageName>
+		<schemaDirectory>src/main/xsd</schemaDirectory>
+		<schemaFiles>NewXMLSchema1.xsd</schemaFiles>
+	</configuration>
+</plugin>
+
+src -> main -> new -> folder -> create a folder 'xsd'. place xsd to this folder. mvn generate-sources will create classes. It will happen even before compilation.
+Run as mvn package ==> will generate classes for you
+
+OutOfMemoryError in JAXB:
+-Too large XML file:
+run configuration -> JRE -> VM arguments -> Add "-Xmx2g" (increase JAVA heap size)
+-periodically invoking method contains new initialization of JAXBContext (JAXBContext jaxbContext = JAXBContext.newInstance(Training.class);)
+create as static variable and initialize it inside static initialization block
+
+Access restriction warning: usage of older JAVA version (prior to 1.6)
